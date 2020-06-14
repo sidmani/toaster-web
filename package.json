@@ -1,0 +1,83 @@
+{
+  "name": "akegata.co",
+  "version": "0.0.1",
+  "description": "akegata denki website",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "rm -rf ./dist; webpack --mode production --display-modules --config webpack.prod.js",
+    "dev": "webpack-dev-server --mode development --config webpack.dev.js",
+    "lint": "eslint src; stylelint \"src/**/*.css\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-config-standard",
+      "stylelint-a11y/recommended",
+      "stylelint-config-rational-order"
+    ],
+    "plugins": [
+      "stylelint-a11y",
+      "stylelint-no-unsupported-browser-features",
+      "stylelint-high-performance-animation",
+      "stylelint-declaration-block-no-ignored-properties"
+    ],
+    "rules": {
+      "plugin/declaration-block-no-ignored-properties": true,
+      "plugin/no-unsupported-browser-features": true,
+      "plugin/no-low-performance-animation-properties": true,
+      "a11y/no-display-none": true
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "postcss-custom-properties": {
+        "importFrom": "src/main.css"
+      },
+      "autoprefixer": {},
+      "cssnano": {}
+    }
+  },
+  "author": "Sid Mani",
+  "license": "Copyright (c) Sid Mani 2020",
+  "dependencies": {
+    "chart.js": "^2.9.3",
+    "mithril": "^2.0.4",
+    "sanitize.css": "^11.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.5",
+    "autoprefixer": "^9.7.6",
+    "babel-loader": "^8.1.0",
+    "compression-webpack-plugin": "^3.1.0",
+    "css-loader": "^3.5.3",
+    "cssnano": "^4.1.10",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "file-loader": "^6.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "postcss-custom-properties": "^9.1.1",
+    "postcss-loader": "^3.0.0",
+    "sitemap-webpack-plugin": "^0.7.1",
+    "style-loader": "^1.2.1",
+    "stylelint": "^13.3.3",
+    "stylelint-a11y": "^1.2.3",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-declaration-block-no-ignored-properties": "^2.3.0",
+    "stylelint-high-performance-animation": "^1.5.1",
+    "stylelint-no-unsupported-browser-features": "^4.0.0",
+    "stylelint-order": "^4.0.0",
+    "tap": "^14.10.7",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^4.2.2"
+  }
+}
