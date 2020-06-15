@@ -12,8 +12,9 @@ let currentTemp = 0;
 let chart;
 let preheatValue = 40;
 let tempOK = true;
+let latestRequest = 0;
 const labels = [];
-for (let i = 0; i < 200; i += 1) {
+for (let i = 0; i < 600; i += 1) {
   labels.push(`${i * UPDATE_INTERVAL}s`);
 }
 
@@ -25,7 +26,7 @@ function getStateText(res) {
   }
 
   if (res.state === 'running') {
-    return `RUNNING PROFILE: ${res.profile}`;
+    return 'REFLOWING';
   }
 
   if (res.state === 'preheat') {
@@ -54,6 +55,7 @@ function updateChart(temp, target, p, i, d) {
 }
 
 setInterval(() => {
+  const reqTime = Date.now();
   if (state === 'error') {
     Promise.all([
       fetch(`${API_URL}temp`)
@@ -63,6 +65,11 @@ setInterval(() => {
         .then((r) => r.json()),
     ])
       .then(([temp, res]) => {
+        if (latestRequest > reqTime) {
+          return;
+        }
+
+        latestRequest = reqTime;
         currentTemp = temp;
         stateText = getStateText(res);
         state = res.state;
@@ -84,6 +91,11 @@ setInterval(() => {
         .then((r) => r.json()),
     ])
       .then(([temp, data, res]) => {
+        if (latestRequest > reqTime) {
+          return;
+        }
+
+        latestRequest = reqTime;
         updateChart(data.temp, data.target, data.p, data.i, data.d);
         currentTemp = temp;
         tempOK = Math.abs(temp - (data.target[data.target.length - 1] || 24)) < 5;
@@ -157,6 +169,7 @@ const index = {
             },
           }),
           m('button', {
+            disabled: state === 'running',
             onclick() {
               fetch(`${API_URL}preheat`, {
                 method: 'post',
@@ -168,7 +181,6 @@ const index = {
             },
           }, 'Preheat'),
           m('button', {
-            disabled: state !== 'preheat',
             onclick() {
               m.request(`${API_URL}run`, { method: 'post' });
             },
